@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Image Uploader</title>
+</head>
+<body>
+  <div id="dropzone">
+    Drop an image here to upload
+  </div>
+  <br>
+  <button id="select-button">Select Image</button>
+  <button id="copy-button">Copy Image Link</button>
+
+  <script>
+    // Set up the select button to open a file selection dialog
+    const selectButton = document.getElementById('select-button');
+    selectButton.addEventListener('click', function() {
+      // Create a hidden file input element and click it to open the file selection dialog
+      const input = document.createElement('input');
+      input.type = 'file';
+      input.style.display = 'none';
+      input.addEventListener('change', function() {
+        // Get the selected file
+        const file = input.files[0];
+        // Create an image element and set its src to the file URL
+        const img = document.createElement('img');
+        img.src = URL.createObjectURL(file);
+        // Append the image to the dropzone
+        const dropzone = document.getElementById('dropzone');
+        dropzone.appendChild(img);
+      });
+      document.body.appendChild(input);
+      input.click();
+      document.body.removeChild(input);
+    });
+
+    // Set up the copy button to copy the image link to the clipboard
+    const copyButton = document.getElementById('copy-button');
+    copyButton.addEventListener('click', function() {
+      // Get the first image in the dropzone
+      const img = document.getElementById('dropzone').querySelector('img');
+      // Check if there is an image
+      if (img) {
+        // Create a temporary input element to copy the image link
+        const input = document.createElement('input');
+        input.value = img.src;
+        document.body.appendChild(input);
+        input.select();
+        document.execCommand('copy');
+        document.body.removeChild(input);
+      }
+    });
+  </script>
+</body>
+</html>
