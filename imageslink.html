@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Image Uploader</title>
+</head>
+<body>
+  <div id="dropzone">
+    Drop images here to upload
+  </div>
+  <br>
+  <button id="select-button">Select Images</button>
+  <button id="copy-button">Copy Image Links</button>
+
+  <script>
+    // Set up the select button to open a file selection dialog
+    const selectButton = document.getElementById('select-button');
+    selectButton.addEventListener('click', function() {
+      // Create a hidden file input element and click it to open the file selection dialog
+      const input = document.createElement('input');
+      input.type = 'file';
+      input.multiple = true;
+      input.style.display = 'none';
+      input.addEventListener('change', function() {
+        // Get the selected files
+        const files = input.files;
+        // Create image elements for each file and set their src to the file URL
+        const dropzone = document.getElementById('dropzone');
+        for (const file of files) {
+          const img = document.createElement('img');
+          img.src = URL.createObjectURL(file);
+          // Append the image to the dropzone
+          dropzone.appendChild(img);
+        }
+      });
+      document.body.appendChild(input);
+      input.click();
+      document.body.removeChild(input);
+    });
+
+    // Set up the copy button to copy the image links to the clipboard
+    const copyButton = document.getElementById('copy-button');
+    copyButton.addEventListener('click', function() {
+      // Get all the images in the dropzone
+      const imgs = document.getElementById('dropzone').querySelectorAll('img');
+      // Check if there are any images
+      if (imgs.length > 0) {
+        // Create a temporary input element to copy the image links
+        const input = document.createElement('input');
+        // Concatenate the image links with newline characters
+        input.value = [...imgs].map(img => img.src).join('\n');
+        document.body.appendChild(input);
+        input.select();
+        document.execCommand('copy');
+        document.body.removeChild(input);
+      }
+    });
+  </script>
+</body>
+</html>
